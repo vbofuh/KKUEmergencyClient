@@ -1,5 +1,19 @@
 package com.example.sos.guides
 
+import android.app.Dialog
+import android.os.Bundle
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sos.R
+import com.example.sos.adapter.GuidesAdapter
+import com.example.sos.databinding.ActivitySurvivalGuidesBinding
+import com.example.sos.models.SurvivalGuide
+import com.example.sos.viewmodel.GuidesViewModel
+
 // SurvivalGuidesActivity.kt
 class SurvivalGuidesActivity : AppCompatActivity() {
 

@@ -1,11 +1,18 @@
 package com.example.sos.pending
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sos.R
+import com.example.sos.adapter.IncidentAdapter
+import com.example.sos.databinding.FragmentPendingBinding
+import com.example.sos.report.SummaryActivity
+import com.example.sos.viewmodel.PendingViewModel
 
 // PendingFragment.kt
 class PendingFragment : Fragment() {

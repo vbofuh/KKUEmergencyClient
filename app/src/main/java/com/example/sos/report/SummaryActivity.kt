@@ -1,5 +1,15 @@
 package com.example.sos.report
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.sos.chat.ChatActivity
+import com.example.sos.databinding.ActivitySummaryBinding
+import com.example.sos.viewmodel.SummaryViewModel
+
 class SummaryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySummaryBinding

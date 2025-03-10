@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sos.adapter.MessageAdapter
+import com.example.sos.databinding.ActivityChatBinding
 import com.example.sos.viewmodel.ChatViewModel
 
 class ChatActivity : AppCompatActivity() {

@@ -1,15 +1,20 @@
 //java/com/example/sos/home/HomeFragment.kt
 package com.example.sos.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sos.R
+import com.example.sos.guides.SurvivalGuidesActivity
+import com.example.sos.report.ReportActivity
 
 class HomeFragment : Fragment() {
 
