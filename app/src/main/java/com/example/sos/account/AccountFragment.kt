@@ -89,10 +89,10 @@ class AccountFragment : Fragment() {
     private fun showEditProfileDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_profile, null)
 
-        val firstNameEditText = dialogView.findViewById<EditText>(R.id.firstNameEditText)
-        val lastNameEditText = dialogView.findViewById<EditText>(R.id.lastNameEditText)
-        val phoneEditText = dialogView.findViewById<EditText>(R.id.phoneEditText)
-        val roleSpinner = dialogView.findViewById<Spinner>(R.id.roleSpinner)
+        val firstNameEditText: EditText = dialogView.findViewById(R.id.firstNameEditText)
+        val lastNameEditText: EditText = dialogView.findViewById(R.id.lastNameEditText)
+        val phoneEditText: EditText = dialogView.findViewById(R.id.phoneEditText)
+        val roleSpinner: Spinner = dialogView.findViewById(R.id.roleSpinner)
 
         // Set up the Spinner (Dropdown)
         val roles = arrayOf("นักศึกษา", "บุคคลธรรมดา", "บุคลากรของมหาวิทยาลัย")
@@ -117,23 +117,23 @@ class AccountFragment : Fragment() {
             }
         }
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("แก้ไขข้อมูลส่วนตัว")
-            .setView(dialogView)
-            .setPositiveButton("บันทึก") { _, _ ->
-                val firstName = firstNameEditText.text.toString()
-                val lastName = lastNameEditText.text.toString()
-                val phone = phoneEditText.text.toString()
-                val role = roleSpinner.selectedItem.toString()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("แก้ไขข้อมูลส่วนตัว")
+        builder.setView(dialogView)
+        builder.setPositiveButton("บันทึก") { _, _ ->
+            val firstName = firstNameEditText.text.toString()
+            val lastName = lastNameEditText.text.toString()
+            val phone = phoneEditText.text.toString()
+            val role = roleSpinner.selectedItem.toString()
 
-                if (firstName.isNotEmpty() && lastName.isNotEmpty() && phone.isNotEmpty()) {
-                    updateUserProfile(firstName, lastName, phone, role)
-                } else {
-                    Toast.makeText(requireContext(), "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show()
-                }
+            if (firstName.isNotEmpty() && lastName.isNotEmpty() && phone.isNotEmpty()) {
+                updateUserProfile(firstName, lastName, phone, role)
+            } else {
+                Toast.makeText(requireContext(), "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("ยกเลิก", null)
-            .show()
+        }
+        builder.setNegativeButton("ยกเลิก", null)
+        builder.show()
     }
 
     private fun updateUserProfile(firstName: String, lastName: String, phone: String, role: String) {
@@ -156,7 +156,7 @@ class AccountFragment : Fragment() {
 
     private fun showResetPasswordDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_reset_password, null)
-        val emailEditText = dialogView.findViewById<EditText>(R.id.emailEditText)
+        val emailEditText: EditText = dialogView.findViewById(R.id.emailEditText)
 
         // Pre-fill with current user email
         accountViewModel.getCurrentUser().observe(viewLifecycleOwner) { user ->
@@ -167,20 +167,20 @@ class AccountFragment : Fragment() {
             }
         }
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("รีเซ็ตรหัสผ่าน")
-            .setMessage("ระบบจะส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปยังอีเมลของคุณ")
-            .setView(dialogView)
-            .setPositiveButton("ส่งลิงก์รีเซ็ต") { _, _ ->
-                val email = emailEditText.text.toString()
-                if (email.isNotEmpty()) {
-                    resetPassword(email)
-                } else {
-                    Toast.makeText(requireContext(), "กรุณากรอกอีเมล", Toast.LENGTH_SHORT).show()
-                }
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("รีเซ็ตรหัสผ่าน")
+        builder.setMessage("ระบบจะส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปยังอีเมลของคุณ")
+        builder.setView(dialogView)
+        builder.setPositiveButton("ส่งลิงก์รีเซ็ต") { _, _ ->
+            val email = emailEditText.text.toString()
+            if (email.isNotEmpty()) {
+                resetPassword(email)
+            } else {
+                Toast.makeText(requireContext(), "กรุณากรอกอีเมล", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("ยกเลิก", null)
-            .show()
+        }
+        builder.setNegativeButton("ยกเลิก", null)
+        builder.show()
     }
 
     private fun resetPassword(email: String) {
@@ -194,14 +194,14 @@ class AccountFragment : Fragment() {
     }
 
     private fun showLogoutConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("ออกจากระบบ")
-            .setMessage("คุณต้องการออกจากระบบหรือไม่?")
-            .setPositiveButton("ออกจากระบบ") { _, _ ->
-                logout()
-            }
-            .setNegativeButton("ยกเลิก", null)
-            .show()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("ออกจากระบบ")
+        builder.setMessage("คุณต้องการออกจากระบบหรือไม่?")
+        builder.setPositiveButton("ออกจากระบบ") { _, _ ->
+            logout()
+        }
+        builder.setNegativeButton("ยกเลิก", null)
+        builder.show()
     }
 
     private fun logout() {

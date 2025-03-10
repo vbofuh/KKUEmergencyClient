@@ -1,4 +1,12 @@
 package com.example.sos.chat
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sos.adapter.MessageAdapter
+import com.example.sos.viewmodel.ChatViewModel
+
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
