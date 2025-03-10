@@ -1,6 +1,7 @@
 package com.example.sos.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sos.models.ChatRoom
 import com.example.sos.models.Message
@@ -17,7 +18,9 @@ class ChatViewModel : ViewModel() {
     // ฟังก์ชันส่งข้อความใหม่
     fun sendMessage(chatId: String, messageText: String): LiveData<Boolean> {
         if (messageText.isBlank()) {
-            return LiveData<Boolean>().apply { value = false }
+            val result = MutableLiveData<Boolean>()
+            result.value = false
+            return result
         }
 
         return chatRepository.sendMessage(chatId, messageText)

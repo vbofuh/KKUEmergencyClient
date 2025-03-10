@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".guides.SurvivalGuidesActivity">
 
+    <!-- Toolbar ที่ปรับปรุงแล้ว -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -13,37 +14,56 @@
         android:background="@color/myred"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="คู่มือเอาตัวรอด"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/white" />
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="ย้อนกลับ"
+                android:padding="12dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="คู่มือเอาตัวรอด"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+    <!-- ช่องค้นหาที่ปรับปรุงแล้ว -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@drawable/bg_search"
-        android:elevation="2dp"
-        app:iconifiedByDefault="false"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:queryHint="ค้นหาคู่มือเอาตัวรอด" />
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
+            app:queryHint="ค้นหาคู่มือเอาตัวรอด" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- หมวดหมู่ -->
     <HorizontalScrollView
         android:id="@+id/categoryScroll"
         android:layout_width="match_parent"
@@ -53,7 +73,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/searchView">
+        app:layout_constraintTop_toBottomOf="@id/searchCardView">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
@@ -114,6 +134,7 @@
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
+    <!-- RecyclerView พร้อมแสดงสถานะเมื่อไม่มีข้อมูล -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGuides"
         android:layout_width="match_parent"
@@ -125,6 +146,7 @@
         app:layout_constraintTop_toBottomOf="@id/categoryScroll"
         tools:listitem="@layout/item_guide" />
 
+    <!-- ProgressBar แสดงระหว่างโหลดข้อมูล -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -136,15 +158,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvEmpty"
+    <!-- ข้อความแสดงเมื่อไม่พบข้อมูล -->
+    <LinearLayout
+        android:id="@+id/emptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ไม่พบคู่มือเอาตัวรอด"
-        android:textSize="16sp"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:contentDescription="ไม่พบข้อมูล"
+            android:src="@drawable/ic_empty"
+            android:alpha="0.3"
+            app:tint="#757575" />
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="ไม่พบคู่มือเอาตัวรอด"
+            android:textSize="16sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
