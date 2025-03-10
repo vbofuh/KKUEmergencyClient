@@ -14,10 +14,12 @@
         android:layout_height="62dp"
         android:layout_marginTop="5dp"
         android:src="@drawable/logo"
+        android:contentDescription="โลโก้ SOS"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardSlider"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginStart="20dp"
@@ -31,7 +33,6 @@
             android:id="@+id/imageSlider"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-
             app:iss_auto_cycle="true"
             app:iss_corner_radius="20"
             app:iss_delay="1000"
@@ -45,13 +46,12 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvReportTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="284dp"
@@ -71,6 +71,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_car"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุอุบัติเหตุบนถนน"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.056"
@@ -85,6 +86,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_snake"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุจับสัตว์"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.357"
@@ -98,6 +100,7 @@
         android:layout_marginTop="328dp"
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_bad"
+        android:contentDescription="แจ้งเหตุทะเลาะวิวาท"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.648"
@@ -112,6 +115,7 @@
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_accountalert"
+        android:contentDescription="แจ้งเหตุบุคคลต้องสงสัย"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -148,7 +152,6 @@
         android:id="@+id/textView4"
         android:layout_width="78dp"
         android:layout_height="42dp"
-
         android:layout_marginStart="216dp"
         android:layout_marginTop="3dp"
         android:fontFamily="@font/kanitregular"
@@ -161,7 +164,6 @@
         android:id="@+id/textView5"
         android:layout_width="78dp"
         android:layout_height="42dp"
-
         android:layout_marginTop="3dp"
         android:fontFamily="@font/kanitregular"
         android:gravity="center_horizontal"
@@ -179,6 +181,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_carcrash"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุรถพัง"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.057"
@@ -193,6 +196,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_heart"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุสุขภาพ"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.357"
@@ -207,6 +211,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_fire"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุไฟไหม้"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.648"
@@ -221,6 +226,7 @@
         android:backgroundTint="@color/myred"
         android:drawableTop="@drawable/ic_plus"
         android:gravity="center"
+        android:contentDescription="แจ้งเหตุอื่นๆ"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.939"
@@ -277,10 +283,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.939"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnheart" />
+        app:layout_constraintTop_toBottomOf="@+id/btnplus" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvGuideTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="576dp"

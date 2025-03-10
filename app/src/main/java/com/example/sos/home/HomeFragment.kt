@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
         btnOther.setOnClickListener { navigateToReport("อื่นๆ") }
 
         // ตั้งค่า listener สำหรับปุ่มคู่มือเอาตัวรอด
-        val guidesBanner = view.findViewById<TextView>(R.id.textView) // Banner คู่มือ
+        val guidesBanner = view.findViewById<TextView>(R.id.tvGuideTitle) // เปลี่ยนจาก textView เป็น tvGuideTitle
         guidesBanner.setOnClickListener {
             val intent = Intent(requireContext(), SurvivalGuidesActivity::class.java)
             startActivity(intent)
