@@ -1,5 +1,4 @@
 package com.example.sos.chat
-
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
