@@ -14,15 +14,11 @@ import com.example.sos.R
 import com.example.sos.account.AccountFragment
 import com.example.sos.message.MessageFragment
 import com.example.sos.pending.PendingFragment
-import com.nafis.bottomnavigation.NafisBottomNavigation
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
 
-    private val ID_home = 1
-    private val ID_pending = 2
-    private val ID_message = 3
-    private val ID_account = 4
-
+    private lateinit var bottomNavigation: BottomNavigationView
     private val homeFragment = HomeFragment()
     private val pendingFragment = PendingFragment()
     private val messageFragment = MessageFragment()
@@ -36,20 +32,16 @@ class HomeActivity : AppCompatActivity() {
             setCurrentFragment(homeFragment)
         }
 
-        val bottomNavigation = findViewById<NafisBottomNavigation>(R.id.bottomNavigation)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
 
-        bottomNavigation.add(NafisBottomNavigation.Model(ID_home, R.drawable.ic_home))
-        bottomNavigation.add(NafisBottomNavigation.Model(ID_pending, R.drawable.ic_pending))
-        bottomNavigation.add(NafisBottomNavigation.Model(ID_message, R.drawable.ic_message))
-        bottomNavigation.add(NafisBottomNavigation.Model(ID_account, R.drawable.ic_account))
-
-        bottomNavigation.setOnClickMenuListener { model ->
-            when (model.id) {
-                ID_home -> setCurrentFragment(homeFragment)
-                ID_pending -> setCurrentFragment(pendingFragment)
-                ID_message -> setCurrentFragment(messageFragment)
-                ID_account -> setCurrentFragment(accountFragment)
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> setCurrentFragment(homeFragment)
+                R.id.nav_pending -> setCurrentFragment(pendingFragment)
+                R.id.nav_message -> setCurrentFragment(messageFragment)
+                R.id.nav_account -> setCurrentFragment(accountFragment)
             }
+            true
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragment_container)) { v, insets ->
@@ -58,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
     }
+
     // ฟังก์ชันเปลี่ยน Fragment แบบป้องกันซ้ำซ้อน + Animation
     private fun setCurrentFragment(fragment: Fragment) {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
@@ -68,7 +61,6 @@ class HomeActivity : AppCompatActivity() {
                     android.R.anim.fade_out  // Animation เวลาออก
                 )
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
                 .commit()
         }
     }

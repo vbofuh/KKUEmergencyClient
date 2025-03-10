@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.sos.MainActivity
 import com.example.sos.login.LoginFragment
 import com.example.sos.R
 
@@ -48,7 +49,8 @@ class Register2Fragment : Fragment() {
 
             if (isValidRegister2(password, confirmPassword)) {
                 Toast.makeText(requireContext(), "Welcome, $email", Toast.LENGTH_SHORT).show()
-                val intent = Intent(requireContext(), LoginFragment::class.java)
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                requireActivity().finish() // ปิด Activity ปัจจุบัน
                 startActivity(intent)
             } else {
                 Toast.makeText(requireContext(), "รหัสผ่านไม่ตรงกัน หรือไม่ถูกต้อง", Toast.LENGTH_SHORT).show()

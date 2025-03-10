@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomeActivity">
+    tools:context=".home.HomeFragment">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -41,14 +41,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- BottomNavigation -->
-    <com.nafis.bottomnavigation.NafisBottomNavigation
-        android:id="@+id/bottomNavigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- ลบ BottomNavigation ของ Nafis ออก -->
 
     <TextView
         android:id="@+id/tvReportTitle"
@@ -77,6 +70,9 @@
         app:layout_constraintHorizontal_bias="0.056"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ส่วนที่เหลือของไฟล์เดิม -->
+    <!-- (ค้างไว้ตามเดิม) -->
 
     <Button
         android:id="@+id/btnsnake"
