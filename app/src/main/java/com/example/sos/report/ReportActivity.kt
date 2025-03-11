@@ -3,47 +3,72 @@ package com.example.sos.report
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.sos.R
-import com.example.sos.databinding.ActivityReportBinding
+import com.example.sos.home.HomeActivity
 import com.example.sos.viewmodel.ReportViewModel
 
 class ReportActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityReportBinding
+    private lateinit var tvReporterName: TextView
+    private lateinit var spinnerRelation: Spinner
+    private lateinit var etLocation: EditText
+    private lateinit var etAdditionalInfo: EditText
+    private lateinit var btnSubmit: Button
+    private lateinit var backButton: TextView
+
     private lateinit var reportViewModel: ReportViewModel
     private var incidentType: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityReportBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        // แก้ไขให้ใช้ชื่อไฟล์ layout ที่มีอยู่จริงในโปรเจ็ค
+        setContentView(R.layout.activity_report)
 
-        // รับค่า incidentType ที่ส่งมาจากหน้า Home
+        // ผูกตัวแปรกับ views
+        tvReporterName = findViewById(R.id.tvReporterName)
+        spinnerRelation = findViewById(R.id.spinnerRelation)
+        etLocation = findViewById(R.id.etLocation)
+        etAdditionalInfo = findViewById(R.id.etAdditionalInfo)
+        btnSubmit = findViewById(R.id.btnSubmit)
+        backButton = findViewById(R.id.backButton)
+
+        // รับค่า incidentType ที่ส่งมาจากปุ่มที่กดในหน้าแรก
         incidentType = intent.getStringExtra("incidentType") ?: ""
 
         reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
 
         // แสดงข้อมูลผู้แจ้งเหตุ
         reportViewModel.getCurrentUser().observe(this) { user ->
-            binding.tvReporterName.text = "${user.firstName} ${user.lastName} (ผู้แจ้ง)"
+            tvReporterName.text = "${user.firstName} ${user.lastName}"
         }
 
         // ตั้งค่า spinner สำหรับความเกี่ยวข้องกับผู้ประสบเหตุ
         val relationOptions = arrayOf("ผู้ประสบเหตุ", "ผู้เห็นเหตุการณ์", "เพื่อนผู้ประสบเหตุ")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, relationOptions)
-        binding.spinnerRelation.adapter = adapter
+        spinnerRelation.adapter = adapter
+
+        // ตั้งค่าปุ่มย้อนกลับให้กลับไปหน้า Home
+        backButton.setOnClickListener {
+            // ใช้ Intent เพื่อกลับไปยังหน้า HomeActivity
+            val intent = Intent(this, HomeActivity::class.java)
+            // เพิ่ม FLAG_ACTIVITY_CLEAR_TOP เพื่อล้าง activity stack
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+            finish() // ปิด ReportActivity นี้
+        }
 
         // ตั้งค่าปุ่มยืนยัน
-        binding.btnSubmit.setOnClickListener {
-            val location = binding.etLocation.text.toString()
-            val additionalInfo = binding.etAdditionalInfo.text.toString()
-            val relation = binding.spinnerRelation.selectedItem.toString()
+        btnSubmit.setOnClickListener {
+            val location = etLocation.text.toString()
+            val additionalInfo = etAdditionalInfo.text.toString()
+            val relation = spinnerRelation.selectedItem.toString()
 
             if (location.isBlank()) {
                 Toast.makeText(this, "กรุณาระบุสถานที่เกิดเหตุ", Toast.LENGTH_SHORT).show()
