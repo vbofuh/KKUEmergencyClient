@@ -17,6 +17,7 @@ import com.example.sos.home.HomeActivity
 import com.example.sos.viewmodel.RegisterViewModel
 import com.example.sos.login.LoginFragment
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 
 class Register2Fragment : Fragment() {
 
@@ -64,27 +65,37 @@ class Register2Fragment : Fragment() {
         }
 
         // ตรวจสอบผลลัพธ์การลงทะเบียน
-        // ตรวจสอบผลลัพธ์การลงทะเบียน
         registerViewModel.registrationResult.observe(viewLifecycleOwner) { result ->
             if (result.success) {
                 Toast.makeText(requireContext(), "ลงทะเบียนสำเร็จ", Toast.LENGTH_SHORT).show()
 
-                // แทนที่จะไปที่ HomeActivity ให้กลับไปที่หน้าล็อกอิน
-                val loginFragment = LoginFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, loginFragment)
-                    .commit()
+                try {
+                    // ใช้ requireActivity() เพื่อเข้าถึง MainActivity
+                    (requireActivity() as MainActivity).let { mainActivity ->
+                        // ล้างสแต็ค Fragment ทั้งหมด
+                        mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-                // อัปเดตปุ่มใน MainActivity (หากต้องการ)
-                (activity as? MainActivity)?.let { mainActivity ->
-                    // ปรับปรุงสถานะปุ่มเพื่อให้ Login มีสีเข้มและ Register เป็นสีอ่อน
-                    val loginButton = mainActivity.findViewById<Button>(R.id.loginButton)
-                    val registerButton = mainActivity.findViewById<Button>(R.id.registerButton)
+                        // โหลด LoginFragment
+                        val transaction = mainActivity.supportFragmentManager.beginTransaction()
+                        transaction.replace(R.id.fragment_container, LoginFragment())
+                        transaction.commitAllowingStateLoss()
 
-                    loginButton.isEnabled = false
-                    loginButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.myred)
-                    registerButton.isEnabled = true
-                    registerButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.mylightred)
+                        // ปรับสถานะปุ่ม
+                        val loginButton = mainActivity.findViewById<Button>(R.id.loginButton)
+                        val registerButton = mainActivity.findViewById<Button>(R.id.registerButton)
+
+                        loginButton.isEnabled = false
+                        loginButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.myred)
+                        registerButton.isEnabled = true
+                        registerButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.mylightred)
+                    }
+                } catch (e: Exception) {
+                    Log.e("Register2", "Error navigating to login: ${e.message}")
+
+                    // ใช้วิธีการ restart activity แทน
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
             } else {
                 Toast.makeText(requireContext(), result.errorMessage ?: "การลงทะเบียนล้มเหลว", Toast.LENGTH_SHORT).show()
