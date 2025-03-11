@@ -3,9 +3,8 @@ package com.example.sos.report
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,14 +26,21 @@ class SummaryActivity : AppCompatActivity() {
     private lateinit var tvAdditionalInfo: TextView
     private lateinit var chatButton: ImageView
     private lateinit var callButton: ImageView
-    private lateinit var chatButtonContainer: androidx.cardview.widget.CardView
-    private lateinit var callButtonContainer: androidx.cardview.widget.CardView
+    private lateinit var chatButtonContainer: CardView
+    private lateinit var callButtonContainer: CardView
     private lateinit var backButton: TextView
     private lateinit var guideButton: Button
     private lateinit var guideCardView: CardView
 
     private lateinit var summaryViewModel: SummaryViewModel
     private var incidentId: String = ""
+
+    // ข้อมูลที่รับมาจากหน้า Report
+    private var reporterName: String = ""
+    private var incidentType: String = ""
+    private var relation: String = ""
+    private var location: String = ""
+    private var additionalInfo: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +61,16 @@ class SummaryActivity : AppCompatActivity() {
         guideButton = findViewById(R.id.guideButton)
         guideCardView = findViewById(R.id.guideCardView)
 
+        // รับค่าจาก Intent
         incidentId = intent.getStringExtra("incidentId") ?: ""
+
+        // รับข้อมูลที่กรอกจากหน้า Report
+        reporterName = intent.getStringExtra("reporterName") ?: ""
+        incidentType = intent.getStringExtra("incidentType") ?: ""
+        relation = intent.getStringExtra("relation") ?: ""
+        location = intent.getStringExtra("location") ?: ""
+        additionalInfo = intent.getStringExtra("additionalInfo") ?: ""
+
         if (incidentId.isEmpty()) {
             Toast.makeText(this, "ไม่พบข้อมูลการแจ้งเหตุ", Toast.LENGTH_SHORT).show()
             navigateToHome()
@@ -64,7 +79,10 @@ class SummaryActivity : AppCompatActivity() {
 
         summaryViewModel = ViewModelProvider(this).get(SummaryViewModel::class.java)
 
-        // รับข้อมูลเหตุการณ์และแสดงผล
+        // แสดงข้อมูลที่รับมาจากหน้า Report
+        showReportData()
+
+        // รับข้อมูลเหตุการณ์และอัพเดทสถานะ
         summaryViewModel.getIncidentDetails(incidentId).observe(this) { incident ->
             // อัพเดทสถานะในหัวข้อ
             when (incident.status) {
@@ -74,12 +92,6 @@ class SummaryActivity : AppCompatActivity() {
                 "เสร็จสิ้น" -> tvStatusTitle.text = "เสร็จสิ้น"
                 else -> tvStatusTitle.text = incident.status
             }
-
-            tvReporterName.text = incident.reporterName
-            tvRelation.text = incident.relationToVictim
-            tvIncidentType.text = incident.incidentType
-            tvLocation.text = incident.location
-            tvAdditionalInfo.text = incident.additionalInfo
         }
 
         // ตั้งค่าปุ่มแชท
@@ -98,7 +110,7 @@ class SummaryActivity : AppCompatActivity() {
         // ตั้งค่าปุ่มโทร
         callButtonContainer.setOnClickListener {
             // ตรวจสอบว่ามีเบอร์โทรเพิ่มเติมที่ระบุในข้อมูลเพิ่มเติมหรือไม่
-            val additionalPhoneNumber = extractPhoneNumber(tvAdditionalInfo.text.toString())
+            val additionalPhoneNumber = extractPhoneNumber(additionalInfo)
 
             if (additionalPhoneNumber.isNotEmpty()) {
                 val intent = Intent(Intent.ACTION_DIAL)
@@ -130,8 +142,21 @@ class SummaryActivity : AppCompatActivity() {
         // ตั้งค่าปุ่มดูคู่มือเอาตัวรอด
         guideButton.setOnClickListener {
             val intent = Intent(this, SurvivalGuidesActivity::class.java)
+            // ส่งประเภทเหตุการณ์ไปให้หน้าคู่มือเพื่อกรองคู่มือที่เกี่ยวข้อง
+            intent.putExtra("incidentType", incidentType)
             startActivity(intent)
         }
+    }
+
+    /**
+     * แสดงข้อมูลที่รับมาจากหน้า Report
+     */
+    private fun showReportData() {
+        tvReporterName.text = reporterName
+        tvIncidentType.text = incidentType
+        tvRelation.text = relation
+        tvLocation.text = location
+        tvAdditionalInfo.text = additionalInfo
     }
 
     private fun navigateToHome() {

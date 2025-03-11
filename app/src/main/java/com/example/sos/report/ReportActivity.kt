@@ -17,6 +17,7 @@ import com.example.sos.viewmodel.ReportViewModel
 class ReportActivity : AppCompatActivity() {
 
     private lateinit var tvReporterName: TextView
+    private lateinit var tvIncidentTitle: TextView
     private lateinit var spinnerRelation: Spinner
     private lateinit var etLocation: EditText
     private lateinit var etAdditionalInfo: EditText
@@ -28,11 +29,11 @@ class ReportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // แก้ไขให้ใช้ชื่อไฟล์ layout ที่มีอยู่จริงในโปรเจ็ค
         setContentView(R.layout.activity_report)
 
         // ผูกตัวแปรกับ views
         tvReporterName = findViewById(R.id.tvReporterName)
+        tvIncidentTitle = findViewById(R.id.tvIncidentTitle)
         spinnerRelation = findViewById(R.id.spinnerRelation)
         etLocation = findViewById(R.id.etLocation)
         etAdditionalInfo = findViewById(R.id.etAdditionalInfo)
@@ -41,6 +42,9 @@ class ReportActivity : AppCompatActivity() {
 
         // รับค่า incidentType ที่ส่งมาจากปุ่มที่กดในหน้าแรก
         incidentType = intent.getStringExtra("incidentType") ?: ""
+
+        // แสดงชื่อเหตุการณ์ในหน้า
+        tvIncidentTitle.text = incidentType
 
         reportViewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
 
@@ -75,15 +79,27 @@ class ReportActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // แสดง loading หรือปิดปุ่มระหว่างรอการส่งข้อมูล
+            btnSubmit.isEnabled = false
+            btnSubmit.text = "กำลังส่งข้อมูล..."
+
             reportViewModel.reportIncident(incidentType, location, relation, additionalInfo)
                 .observe(this) { result ->
                     if (result.success) {
-                        // ไปยังหน้าสรุปการแจ้งเหตุ
+                        // ไปยังหน้าสรุปการแจ้งเหตุพร้อมส่งข้อมูลที่กรอกไป
                         val intent = Intent(this, SummaryActivity::class.java)
                         intent.putExtra("incidentId", result.incidentId)
+                        intent.putExtra("reporterName", tvReporterName.text.toString())
+                        intent.putExtra("incidentType", incidentType)
+                        intent.putExtra("relation", relation)
+                        intent.putExtra("location", location)
+                        intent.putExtra("additionalInfo", additionalInfo)
                         startActivity(intent)
                         finish()
                     } else {
+                        // เปิดปุ่มอีกครั้งเมื่อเกิดข้อผิดพลาด
+                        btnSubmit.isEnabled = true
+                        btnSubmit.text = "ยืนยัน"
                         Toast.makeText(this, result.message ?: "เกิดข้อผิดพลาด", Toast.LENGTH_SHORT).show()
                     }
                 }
