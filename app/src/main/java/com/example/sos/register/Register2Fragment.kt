@@ -13,11 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.sos.MainActivity
 import com.example.sos.R
-import com.example.sos.home.HomeActivity
 import com.example.sos.viewmodel.RegisterViewModel
 import com.example.sos.login.LoginFragment
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 
 class Register2Fragment : Fragment() {
 
@@ -68,35 +66,7 @@ class Register2Fragment : Fragment() {
         registerViewModel.registrationResult.observe(viewLifecycleOwner) { result ->
             if (result.success) {
                 Toast.makeText(requireContext(), "ลงทะเบียนสำเร็จ", Toast.LENGTH_SHORT).show()
-
-                try {
-                    // ใช้ requireActivity() เพื่อเข้าถึง MainActivity
-                    (requireActivity() as MainActivity).let { mainActivity ->
-                        // ล้างสแต็ค Fragment ทั้งหมด
-                        mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-                        // โหลด LoginFragment
-                        val transaction = mainActivity.supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.fragment_container, LoginFragment())
-                        transaction.commitAllowingStateLoss()
-
-                        // ปรับสถานะปุ่ม
-                        val loginButton = mainActivity.findViewById<Button>(R.id.loginButton)
-                        val registerButton = mainActivity.findViewById<Button>(R.id.registerButton)
-
-                        loginButton.isEnabled = false
-                        loginButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.myred)
-                        registerButton.isEnabled = true
-                        registerButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.mylightred)
-                    }
-                } catch (e: Exception) {
-                    Log.e("Register2", "Error navigating to login: ${e.message}")
-
-                    // ใช้วิธีการ restart activity แทน
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+                navigateToLogin()
             } else {
                 Toast.makeText(requireContext(), result.errorMessage ?: "การลงทะเบียนล้มเหลว", Toast.LENGTH_SHORT).show()
             }
@@ -115,6 +85,55 @@ class Register2Fragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun navigateToLogin() {
+        try {
+            // Get activity and make sure it's MainActivity
+            val mainActivity = requireActivity() as? MainActivity
+            if (mainActivity == null) {
+                Log.e("Register2", "Activity is not MainActivity")
+                restartApp()
+                return
+            }
+
+            // Clear the fragment back stack
+            mainActivity.supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+            // Set button state BEFORE loading the fragment
+            val loginButton = mainActivity.findViewById<Button>(R.id.loginButton)
+            val registerButton = mainActivity.findViewById<Button>(R.id.registerButton)
+
+            if (loginButton != null && registerButton != null) {
+                // Login button should be ENABLED for login screen
+                loginButton.isEnabled = true
+                loginButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.myred)
+
+                // Register button should be disabled
+                registerButton.isEnabled = false
+                registerButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.mylightred)
+            } else {
+                Log.e("Register2", "Buttons not found")
+            }
+
+            // Create and show the login fragment
+            val loginFragment = LoginFragment()
+            mainActivity.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, loginFragment)
+                .commit()
+
+        } catch (e: Exception) {
+            Log.e("Register2", "Error navigating to login: ${e.message}")
+            restartApp()
+        }
+    }
+
+    private fun restartApp() {
+        // Fallback method - restart the app completely
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun isValidRegister2(password: String, confirmPassword: String): Boolean {
