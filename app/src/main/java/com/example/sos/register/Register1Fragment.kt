@@ -50,7 +50,12 @@ class Register1Fragment : Fragment() {
             if (isValidRegister1(firstName, lastName, email, phone)) {
                 //Navigate to Register2Fragment and pass data
                 val bundle = Bundle()
+                bundle.putString("firstName", firstName)
+                bundle.putString("lastName", lastName)
                 bundle.putString("email", email)
+                bundle.putString("phone", phone)
+                bundle.putString("role", role)
+
                 val register2Fragment = Register2Fragment()
                 register2Fragment.arguments = bundle
 
