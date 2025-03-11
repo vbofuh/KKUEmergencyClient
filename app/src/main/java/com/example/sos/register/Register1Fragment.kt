@@ -2,6 +2,7 @@
 package com.example.sos.register
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,9 @@ class Register1Fragment : Fragment() {
         phoneEditText = view.findViewById(R.id.phoneEditText)
         roleSpinner = view.findViewById(R.id.roleSpinner)
         nextButton = view.findViewById(R.id.nextButton)
+
+        firstNameEditText.inputType = (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME)
+        lastNameEditText.inputType = (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME)
 
         // Set up the Spinner (Dropdown)
         val roles = arrayOf("นักศึกษา", "บุคคลธรรมดา", "บุคลากรของมหาวิทยาลัย")
@@ -74,7 +78,10 @@ class Register1Fragment : Fragment() {
     private fun isValidRegister1(firstName: String, lastName: String, email: String, phone: String): Boolean {
         val emailRegex = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$".toRegex()
 
-        return firstName.isNotEmpty() && lastName.isNotEmpty() &&
-                emailRegex.matches(email) && phone.isNotEmpty()
+        // ตรวจสอบแค่ว่ามีการป้อนข้อมูล ไม่ว่าจะเป็นภาษาใด
+        return firstName.trim().isNotEmpty() &&
+                lastName.trim().isNotEmpty() &&
+                emailRegex.matches(email) &&
+                phone.isNotEmpty()
     }
 }

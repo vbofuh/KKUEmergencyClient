@@ -6,10 +6,14 @@ import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import com.example.sos.login.LoginFragment
 import com.example.sos.register.Register1Fragment
 import com.google.firebase.FirebaseApp
+import java.util.Locale
+import android.content.res.Configuration
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +21,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val config = resources.configuration
+        val locales = ConfigurationCompat.getLocales(config)
+        if (locales.isEmpty || (locales[0] != Locale.ENGLISH && locales[0]?.language != "th")) {
+            val newConfig = Configuration(config)
+            val newLocales = LocaleListCompat.create(Locale("th"), Locale.ENGLISH)
+            ConfigurationCompat.setLocales(newConfig, newLocales)
+            resources.updateConfiguration(newConfig, resources.displayMetrics)
+        }
+
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)

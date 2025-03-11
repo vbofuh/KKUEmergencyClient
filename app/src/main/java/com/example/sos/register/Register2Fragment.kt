@@ -15,6 +15,8 @@ import com.example.sos.MainActivity
 import com.example.sos.R
 import com.example.sos.home.HomeActivity
 import com.example.sos.viewmodel.RegisterViewModel
+import com.example.sos.login.LoginFragment
+import androidx.core.content.ContextCompat
 
 class Register2Fragment : Fragment() {
 
@@ -62,14 +64,28 @@ class Register2Fragment : Fragment() {
         }
 
         // ตรวจสอบผลลัพธ์การลงทะเบียน
+        // ตรวจสอบผลลัพธ์การลงทะเบียน
         registerViewModel.registrationResult.observe(viewLifecycleOwner) { result ->
             if (result.success) {
                 Toast.makeText(requireContext(), "ลงทะเบียนสำเร็จ", Toast.LENGTH_SHORT).show()
 
-                // ไปที่หน้า HomeActivity หลังจากลงทะเบียนสำเร็จ
-                val intent = Intent(requireContext(), HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                // แทนที่จะไปที่ HomeActivity ให้กลับไปที่หน้าล็อกอิน
+                val loginFragment = LoginFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, loginFragment)
+                    .commit()
+
+                // อัปเดตปุ่มใน MainActivity (หากต้องการ)
+                (activity as? MainActivity)?.let { mainActivity ->
+                    // ปรับปรุงสถานะปุ่มเพื่อให้ Login มีสีเข้มและ Register เป็นสีอ่อน
+                    val loginButton = mainActivity.findViewById<Button>(R.id.loginButton)
+                    val registerButton = mainActivity.findViewById<Button>(R.id.registerButton)
+
+                    loginButton.isEnabled = false
+                    loginButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.myred)
+                    registerButton.isEnabled = true
+                    registerButton.backgroundTintList = ContextCompat.getColorStateList(mainActivity, R.color.mylightred)
+                }
             } else {
                 Toast.makeText(requireContext(), result.errorMessage ?: "การลงทะเบียนล้มเหลว", Toast.LENGTH_SHORT).show()
             }
